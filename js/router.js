@@ -3,8 +3,6 @@
 // Manages page navigation, sidebar state, topbar content
 // ============================================================
 
-console.log('=== router.js loaded ===');
-
 import { AppState } from './store.js';
 import { can } from './auth.js';
 import { getCurMonth, monthLabel } from './store.js';
@@ -111,7 +109,7 @@ const PAGE_CONFIG = {
   maintenance: {
     title: 'Maintenance',
     sub: () => 'Requests & repairs',
-    actions: () => `<button class="btn btn-primary btn-sm" onclick="maintOpenNew()">+ Log Job</button>`,
+    actions: () => `<button class="btn btn-primary btn-sm" onclick="openModal('m-maintenance')">+ New Request</button>`,
     permission: null
   },
   documents: {
@@ -139,11 +137,7 @@ export const router = {
 
   // Navigate to a page
   nav(page, opts = {}) {
-    console.log('=== START Router.nav ===');
-    console.log('=== Router.nav called with:', page, '===');
     const cfg = PAGE_CONFIG[page];
-    console.log('Page config found:', !!cfg);
-    console.log('Page config:', cfg);
     if (!cfg) { console.warn('Unknown page:', page); return; }
 
     // Permission check
@@ -191,13 +185,11 @@ export const router = {
 
   // Dispatch page render to the right module
   async renderPage(page) {
-    console.log('renderPage called with:', page);
     // Each page module exports a render() function
     // They are loaded lazily here
     try {
       switch (page) {
         case 'dashboard':
-          console.log('Loading dashboard.js');
           (await import('./pages/dashboard.js')).render(); break;
         case 'status':
           (await import('./pages/status.js')).render(); break;

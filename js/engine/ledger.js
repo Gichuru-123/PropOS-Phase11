@@ -323,21 +323,19 @@ export function calculateHealthScore(tenantId) {
   if (!schedule.length) return 100;
 
   let score = 100;
-  const gracePeriodDays = 5; // Grace period before late penalties apply
 
   // Analyse each month in the schedule
   schedule.forEach(s => {
     const inv = getMonthlyInvoice(tenantId, s.month);
     if (!inv) return;
 
-    if (inv.status === 'unpaid')   score -= 15; // missed month: -15 points
-    if (inv.status === 'partial')  score -= 5;  // partial payment: -5 points
+    if (inv.status === 'unpaid')   score -= 15; // missed month
+    if (inv.status === 'partial')  score -= 5;  // partial payment
 
-    // Check how late they paid (beyond grace period)
+    // Check how late they paid
     const monthPayments = AppState.transactions.filter(tx =>
       tx.tenantId === tenantId &&
       tx.direction === 'credit' &&
-      tx.deletedAt === null &&
       tx.date?.startsWith(s.month)
     );
     if (monthPayments.length > 0) {
@@ -345,19 +343,15 @@ export function calculateHealthScore(tenantId) {
       const dueDate  = new Date(s.month + '-' + String(dueDay).padStart(2, '0'));
       const payDate  = new Date(monthPayments[0].date);
       const daysLate = Math.max(0, Math.round((payDate - dueDate) / 86400000));
-      // Only penalize if beyond grace period: -2 points per day (max -20)
-      if (daysLate > gracePeriodDays) {
-        const penaltyDays = daysLate - gracePeriodDays;
-        score -= Math.min(20, penaltyDays * 2);
-      }
+      if (daysLate > 5) score -= Math.min(20, daysLate * 2);
     }
   });
 
   // Bonuses
   const currentBal = getTenantBalance(tenantId);
-  if (currentBal < 0) score += 5; // paid in advance bonus: +5 points
+  if (currentBal < 0) score += 5; // paid in advance
 
-  // Count consecutive on-time months (3 consecutive = +5 points)
+  // Count consecutive on-time months
   let streak = 0;
   for (let i = schedule.length - 1; i >= 0; i--) {
     const inv = getMonthlyInvoice(tenantId, schedule[i].month);
@@ -365,6 +359,7 @@ export function calculateHealthScore(tenantId) {
     else break;
   }
   if (streak >= 3) score += 5;
+  if (streak >= 6) score += 5;
 
   return Math.max(0, Math.min(100, Math.round(score)));
 }
@@ -399,7 +394,7 @@ export function getDashboardStats(month) {
   // Expected rent = sum of all occupied unit rents
   const expectedRent = AppState.units
     .filter(u => u.status === 'occupied' && !u.deletedAt)
-    .reduce((s, u) => s + (Number(u.rent) || 0), 0);
+    .reduce((s, u) => s + (u.rent || 0), 0);
 
   // Collected this month
   const collected = AppState.transactions
@@ -408,12 +403,12 @@ export function getDashboardStats(month) {
       tx.deletedAt === null &&
       tx.date?.startsWith(m)
     )
-    .reduce((s, tx) => s + (Number(tx.amount) || 0), 0);
+    .reduce((s, tx) => s + (tx.amount || 0), 0);
 
   // Expenses this month
   const expenses = AppState.expenses
     .filter(e => e.deletedAt === null && e.date?.startsWith(m))
-    .reduce((s, e) => s + (Number(e.amount) || 0), 0);
+    .reduce((s, e) => s + (e.amount || 0), 0);
 
   // Total arrears (all tenants, all time)
   const totalArrears = activeTenants.reduce((s, t) => {
@@ -428,7 +423,7 @@ export function getDashboardStats(month) {
       .filter(tx =>
         tx.tenantId === t.id && tx.direction === 'credit' &&
         tx.deletedAt === null && tx.date?.startsWith(m)
-      ).reduce((s, tx) => s + (Number(tx.amount) || 0), 0);
+      ).reduce((s, tx) => s + tx.amount, 0);
 
     if (bal < 0)           creditCount++;
     else if (bal === 0)    paidCount++;
@@ -436,34 +431,20 @@ export function getDashboardStats(month) {
     else                   unpaidCount++;
   });
 
-  const arrearsCount = activeTenants.reduce((count, t) => {
-    return getTenantBalance(t.id) > 0 ? count + 1 : count;
-  }, 0);
-
   const collectionRate = expectedRent > 0
-    ? Math.min(100, collected / expectedRent * 100)
+    ? Math.min(100, Math.round(collected / expectedRent * 100))
     : 0;
-
-  // Only count units that belong to active (non-deleted) buildings
-  const activeBldgIds = new Set(AppState.buildings.filter(b => !b.deletedAt).map(b => b.id));
-  const totalUnits    = AppState.units.filter(u => !u.deletedAt && activeBldgIds.has(u.buildingId)).length;
-  const occupiedUnits = AppState.units.filter(u => u.status === 'occupied' && !u.deletedAt && activeBldgIds.has(u.buildingId)).length;
-  const vacantUnits   = AppState.units.filter(u => u.status === 'vacant'   && !u.deletedAt && activeBldgIds.has(u.buildingId)).length;
-  const occupancyRate = totalUnits > 0 ? occupiedUnits / totalUnits * 100 : 0;
 
   return {
     month: m,
     activeTenants: activeTenants.length,
-    totalUnits,
-    occupiedUnits,
-    vacantUnits,
-    occupancyRate,
+    totalUnits:    AppState.units.filter(u => !u.deletedAt).length,
+    occupiedUnits: AppState.units.filter(u => u.status === 'occupied' && !u.deletedAt).length,
+    vacantUnits:   AppState.units.filter(u => u.status === 'vacant'   && !u.deletedAt).length,
     expectedRent,
     collected,
     expenses,
     netProfit:     collected - expenses,
-    arrears:       totalArrears,
-    arrearsCount,
     totalArrears,
     collectionRate,
     paidCount,
@@ -502,17 +483,11 @@ export function getSixMonthTrend() {
   return months.map(m => ({
     month:    m,
     label:    monthLabel(m),
-    expected: AppState.units
-      .filter(u => u.status === 'occupied' && !u.deletedAt)
-      .reduce((s, u) => s + (Number(u.rent) || 0), 0),
     income:   AppState.transactions
       .filter(tx => tx.direction === 'credit' && tx.deletedAt === null && tx.date?.startsWith(m))
-      .reduce((s, tx) => s + (Number(tx.amount) || 0), 0),
-    collected: AppState.transactions
-      .filter(tx => tx.direction === 'credit' && tx.deletedAt === null && tx.date?.startsWith(m))
-      .reduce((s, tx) => s + (Number(tx.amount) || 0), 0),
+      .reduce((s, tx) => s + tx.amount, 0),
     expenses: AppState.expenses
       .filter(e => e.deletedAt === null && e.date?.startsWith(m))
-      .reduce((s, e) => s + (Number(e.amount) || 0), 0)
+      .reduce((s, e) => s + e.amount, 0)
   }));
 }

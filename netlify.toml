@@ -9,10 +9,10 @@
   to   = "/app.html"
   status = 200
 
-# Beem Africa SMS API proxy (avoids CORS in browser)
+# Africa's Talking API proxy (avoids CORS in browser)
 [[redirects]]
-  from = "/beem-proxy/*"
-  to   = "https://apisms.beem.africa/v1/:splat"
+  from = "/at-proxy/*"
+  to   = "https://api.africastalking.com/version1/:splat"
   status = 200
   force  = true
   headers = { X-From = "Netlify" }

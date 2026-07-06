@@ -16,10 +16,6 @@ export const AppState = {
   payments:      [],
   expenses:      [],
   transactions:  [],
-  notifications: [],
-  activityLog:      [],
-  maintenanceJobs:  [],
-  documents:        [],
 
   // App settings (from Firestore settings/main)
   settings: {

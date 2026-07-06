@@ -6,6 +6,7 @@
 import { AppState, ksh, getCurMonth, monthLabel } from '../store.js';
 import { router } from '../router.js';
 import { can } from '../auth.js';
+import { openModal } from '../components/modal.js';
 import { renderBillingBar, initBillingBarHandlers } from '../components/billingBar.js';
 import {
   getStatusThisMonth, getTenantBalance,
@@ -225,10 +226,7 @@ window.quickPayFromStatus = function(tenantId) {
   setTimeout(() => {
     openModal('m-payment');
     const sel = document.getElementById('pm-tenant');
-    if (sel) {
-      sel.value = tenantId;
-      sel.dispatchEvent(new Event('change'));
-    }
+    if (sel) { sel.value = tenantId; sel.dispatchEvent(new Event('change')); }
   }, 200);
 };
 

@@ -7,7 +7,7 @@ import { AppState, ksh, getToday, monthLabel } from '../store.js';
 import { router } from '../router.js';
 import { can } from '../auth.js';
 import { toast } from '../components/toast.js';
-import { closeModal, confirmDialog } from '../components/modal.js';
+import { openModal, closeModal, confirmDialog } from '../components/modal.js';
 import { addTenant, updateTenant, deleteTenant, normalisePhone } from '../services/tenantService.js';
 import { getVacantUnits } from '../services/unitService.js';
 import { getTenantBalance, getStatusThisMonth, calculateHealthScore } from '../engine/ledger.js';
@@ -129,9 +129,8 @@ function renderTenantRows() {
     const leaseWarn = t.leaseEnd && isLeaseExpiringSoon(t.leaseEnd)
       ? `<div class="lease-warning">⚠ Expires soon</div>` : '';
 
-    // Health score (calculate dynamically)
-    const healthScore = calculateHealthScore(t.id);
-    const healthHtml = healthBadge(healthScore);
+    // Health score
+    const healthHtml = healthBadge(t.healthScore || 100);
 
     // Status badge
     const statusHtml = t.status === 'vacated'
@@ -180,7 +179,6 @@ export function renderProfile() {
   const unit = AppState.units.find(u => u.id === t.unitId);
   const bldg = AppState.buildings.find(b => b.id === t.buildingId);
   const bal  = getTenantBalance(t.id);
-  const healthScore = calculateHealthScore(t.id);
   const initials = getInitials(t.name);
 
   // Update topbar
@@ -203,7 +201,7 @@ export function renderProfile() {
       <div class="profile-info">
         <div class="profile-name">${esc(t.name)}</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-          ${healthBadge(healthScore)}
+          ${healthBadge(t.healthScore || 100)}
           ${t.status === 'vacated'
             ? '<span class="badge badge-gray">Vacated</span>'
             : '<span class="badge badge-green">Active</span>'}
@@ -434,10 +432,7 @@ window.quickPayTenant = function(id) {
   setTimeout(() => {
     openModal('m-payment');
     const sel = document.getElementById('pm-tenant');
-    if (sel) {
-      sel.value = id;
-      sel.dispatchEvent(new Event('change'));
-    }
+    if (sel) { sel.value = id; sel.dispatchEvent(new Event('change')); }
   }, 200);
 };
 
@@ -488,11 +483,11 @@ window.populateTenantUnitsFromSelect = function(bldgSelectId, unitSelectId) {
 // ── HELPERS ────────────────────────────────────────────────
 function healthBadge(score) {
   score = score || 100;
-  let cls = 'green', label = '⭐ Excellent';
-  if (score < 40)      { cls = 'red';   label = '🔴 High Risk'; }
-  else if (score < 60) { cls = 'amber'; label = '🟡 At Risk'; }
-  else if (score < 80) { cls = 'blue';  label = '🔵 Good'; }
-  return `<span class="health-score health-${cls}">${label} ${score}</span>`;
+  let cls = 'excellent', label = '⭐ Excellent';
+  if (score < 40)      { cls = 'high-risk'; label = '🔴 High Risk'; }
+  else if (score < 60) { cls = 'at-risk';   label = '🟡 At Risk'; }
+  else if (score < 80) { cls = 'good';      label = '🔵 Good'; }
+  return `<span class="health-score ${cls}">${label} ${score}</span>`;
 }
 
 function isLeaseExpiringSoon(leaseEnd) {

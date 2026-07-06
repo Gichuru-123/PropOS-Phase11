@@ -19,9 +19,6 @@
 <link rel="stylesheet" href="css/pages/dashboard.css"/>
 <link rel="stylesheet" href="css/pages/reports.css"/>
 <link rel="stylesheet" href="css/pages/notifications.css"/>
-<link rel="stylesheet" href="css/pages/activity.css"/>
-<link rel="stylesheet" href="css/pages/maintenance.css"/>
-<link rel="stylesheet" href="css/pages/documents.css"/>
 </head>
 <body>
 
@@ -330,7 +327,13 @@
       </div>
 
       <!-- ── MAINTENANCE ── -->
-      <div class="page" id="page-maintenance"></div>
+      <div class="page" id="page-maintenance">
+        <div style="text-align:center;padding:80px 20px;color:var(--text-muted)">
+          <div style="font-size:3rem;margin-bottom:16px">🔧</div>
+          <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--text-primary);margin-bottom:8px">Maintenance</div>
+          <div style="font-size:0.85rem">Coming in Phase 12</div>
+        </div>
+      </div>
 
       <!-- ── DOCUMENTS ── -->
       <div class="page" id="page-documents">
@@ -744,65 +747,6 @@
 <div id="toast-container"></div>
 
 <!-- ═══════════════════════════════════════════════
-     DOCUMENT UPLOAD MODAL (Phase 13)
-═══════════════════════════════════════════════ -->
-
-<div class="overlay" id="m-document">
-  <div class="modal" style="max-width:520px">
-    <div class="modal-head">
-      <div class="modal-title" id="m-doc-title">Upload Document</div>
-      <button class="modal-close" onclick="closeModal('m-document')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">File</label>
-        <input type="file" class="form-input" id="doc-file" accept=".pdf,.jpg,.jpeg,.png"/>
-        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Accepted: PDF, JPG, PNG</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Document Name (optional)</label>
-        <input type="text" class="form-input" id="doc-name" placeholder="Leave blank to use filename"/>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Document Type</label>
-        <select class="form-select" id="doc-type">
-          <option value="other">Other</option>
-          <option value="lease">Lease Agreement</option>
-          <option value="id">ID Document</option>
-          <option value="receipt">Payment Receipt</option>
-          <option value="photo">Photo</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Entity Type</label>
-        <select class="form-select" id="doc-entity-type-upload" onchange="docEntityTypeChange(this.value)">
-          <option value="">Select Entity Type</option>
-          <option value="tenant">Tenant</option>
-          <option value="building">Building</option>
-          <option value="general">General</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Entity</label>
-        <select class="form-select" id="doc-entity-id-upload" disabled>
-          <option value="">Select Entity Type First</option>
-        </select>
-      </div>
-
-      <div class="form-actions">
-        <button class="btn btn-ghost" onclick="closeModal('m-document')">Cancel</button>
-        <button class="btn btn-primary" id="btn-save-doc" onclick="saveDocumentForm()">Upload</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════
      NOTIFICATION MODALS (Phase 9)
 ═══════════════════════════════════════════════ -->
 
@@ -878,125 +822,6 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════
-     MAINTENANCE MODAL (Phase 11)
-═══════════════════════════════════════════════ -->
-<div class="overlay" id="m-maint">
-  <div class="modal" style="max-width:580px">
-    <div class="modal-head">
-      <div class="modal-title" id="m-maint-title">🔧 Log Maintenance Job</div>
-      <button class="modal-close" onclick="closeModal('m-maint')">✕</button>
-    </div>
-    <div class="modal-body">
-
-      <!-- Priority + Category -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group">
-          <label class="form-label">Priority</label>
-          <select class="form-select" id="mj-priority">
-            <option value="low">🟢 Low</option>
-            <option value="medium" selected>🔵 Medium</option>
-            <option value="high">🟡 High</option>
-            <option value="urgent">🔴 Urgent</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Category</label>
-          <select class="form-select" id="mj-category">
-            <option value="general">🔧 General</option>
-            <option value="plumbing">🚿 Plumbing</option>
-            <option value="electrical">⚡ Electrical</option>
-            <option value="structural">🏗️ Structural</option>
-            <option value="carpentry">🪚 Carpentry</option>
-            <option value="pest">🐛 Pest Control</option>
-            <option value="cleaning">🧹 Cleaning</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Title -->
-      <div class="form-group">
-        <label class="form-label">Title <span style="color:var(--red)">*</span></label>
-        <input type="text" class="form-input" id="mj-title"
-          placeholder="e.g. Leaking tap in Unit 3B bathroom"/>
-      </div>
-
-      <!-- Building → Unit -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group">
-          <label class="form-label">Building</label>
-          <select class="form-select" id="mj-building" onchange="maintOnBuildingChange()">
-            <option value="">— Select —</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Unit</label>
-          <select class="form-select" id="mj-unit" onchange="maintOnUnitChange()">
-            <option value="">— Select building first —</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Tenant (auto-filled, read-only) -->
-      <div class="form-group" id="mj-tenant-wrap" style="display:none">
-        <label class="form-label">Tenant (auto-filled)</label>
-        <input type="text" class="form-input" id="mj-tenant" readonly
-          style="background:var(--bg-base);color:var(--text-muted)"/>
-      </div>
-
-      <!-- Description -->
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="mj-description" rows="3"
-          placeholder="Describe the issue in detail…"></textarea>
-      </div>
-
-      <!-- Assigned To + Due Date -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group">
-          <label class="form-label">Assigned To</label>
-          <input type="text" class="form-input" id="mj-assigned"
-            placeholder="Caretaker name"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Due Date</label>
-          <input type="date" class="form-input" id="mj-due"/>
-        </div>
-      </div>
-
-      <!-- Status (edit mode only) -->
-      <div class="form-group" id="mj-status-wrap" style="display:none">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="mj-status">
-          <option value="open">🔓 Open</option>
-          <option value="in_progress">🔨 In Progress</option>
-          <option value="done">✅ Done</option>
-          <option value="closed">🗃️ Closed</option>
-        </select>
-      </div>
-
-      <!-- Notes (edit mode only) -->
-      <div class="form-group" id="mj-notes-wrap" style="display:none">
-        <label class="form-label">Update Notes</label>
-        <textarea class="form-textarea" id="mj-notes" rows="2"
-          placeholder="Progress notes or resolution details…"></textarea>
-      </div>
-
-      <!-- Photo upload -->
-      <div class="form-group">
-        <label class="form-label">Photos <span style="color:var(--text-muted);font-weight:400">(optional, max 3)</span></label>
-        <input type="file" id="mj-photo" accept="image/*" multiple
-          style="font-size:0.82rem;color:var(--text-secondary);padding:6px 0"/>
-      </div>
-
-      <div class="form-actions">
-        <button class="btn btn-ghost" onclick="closeModal('m-maint')">Cancel</button>
-        <button class="btn btn-primary" id="btn-maint-save" onclick="maintSaveForm()">Log Job</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════
      APP BOOTSTRAP
 ═══════════════════════════════════════════════ -->
 <script type="module">
@@ -1016,10 +841,7 @@ import { listenTenants }    from './js/services/tenantService.js';
 import { listenPayments, listenTransactions } from './js/services/paymentService.js';
 import { listenExpenses }       from './js/services/expenseService.js';
 import { listenSettings }       from './js/services/settingsService.js';
-import { listenDocuments }      from './js/services/documentService.js';
 import { listenNotifications }  from './js/services/notificationService.js';
-import { listenActivity }       from './js/services/activityService.js';
-import { listenMaintenance }   from './js/services/maintenanceService.js';
 import { isSeeded, seedDatabase } from './js/services/seedService.js';
 import { db } from './js/firebase-config.js';
 import {
@@ -1151,10 +973,7 @@ watchAuthState(
       listenPayments(refreshCurrentPage),
       listenTransactions(refreshCurrentPage),
       listenExpenses(refreshCurrentPage),
-      listenDocuments(refreshCurrentPage),
-      listenNotifications(refreshCurrentPage),
-      listenActivity(refreshCurrentPage),
-      listenMaintenance(refreshCurrentPage)
+      listenNotifications(refreshCurrentPage)
     ];
     unsubs.forEach(fn => { if (fn) AppState.addListener(fn); });
 
@@ -1182,21 +1001,41 @@ watchAuthState(
 
 // ── Role-based sidebar visibility ────────────────────────
 function applyRoleVisibility(role) {
-  if (role === 'accountant' || role === 'caretaker') {
-    const el = document.getElementById('nav-activity');
-    if (el) el.style.display = 'none';
-  }
-  if (role === 'caretaker') {
-    ['payments','invoices','statements','expenses','smsparser','reports'].forEach(p => {
-      const el = document.querySelector(`.nav-item[data-page="${p}"]`);
-      if (el) el.style.display = 'none';
-    });
-  }
+  // Define exactly what each role sees in the sidebar
+  const roleNav = {
+    admin:      ['status','dashboard','buildings','tenants','maintenance','payments','invoices','statements','expenses','smsparser','reports','notifications','documents','activity','settings'],
+    owner:      ['status','dashboard','buildings','tenants','payments','statements','reports','activity'],
+    accountant: ['status','dashboard','buildings','tenants','payments','invoices','statements','expenses','smsparser','reports','notifications','documents'],
+    caretaker:  ['status','dashboard','buildings','tenants','maintenance','notifications','documents']
+  };
+
+  const allPages = ['status','dashboard','buildings','tenants','maintenance','payments','invoices','statements','expenses','smsparser','reports','notifications','documents','activity','settings'];
+  const allowed  = roleNav[role] || roleNav.admin;
+
+  // Show/hide nav items
+  allPages.forEach(page => {
+    const el = document.querySelector(`.nav-item[data-page="${page}"]`);
+    if (el) el.style.display = allowed.includes(page) ? '' : 'none';
+  });
+
+  // Owner is read-only — inject CSS to hide write buttons
+  const existing = document.getElementById('role-styles');
+  if (existing) existing.remove();
+
   if (role === 'owner') {
-    ['smsparser','maintenance'].forEach(p => {
-      const el = document.querySelector(`.nav-item[data-page="${p}"]`);
-      if (el) el.style.display = 'none';
-    });
+    const s = document.createElement('style');
+    s.id = 'role-styles';
+    s.textContent = `
+      /* Owner: hide all action buttons except exports */
+      #topbar-actions .btn-primary,
+      #topbar-actions .btn-success,
+      .psb-card .btn:not([onclick*="Profile"]):not([onclick*="Statement"]) { display:none!important; }
+      button[onclick*="exportDashboard"],
+      button[onclick*="downloadPDF"],
+      button[onclick*="downloadStatement"],
+      button[onclick*="exportCSV"] { display:inline-flex!important; }
+    `;
+    document.head.appendChild(s);
   }
 }
 

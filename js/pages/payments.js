@@ -4,7 +4,7 @@
 import { AppState, ksh, getToday, getCurMonth, monthLabel } from '../store.js';
 import { can } from '../auth.js';
 import { toast } from '../components/toast.js';
-import { closeModal, confirmDialog } from '../components/modal.js';
+import { openModal, closeModal, confirmDialog } from '../components/modal.js';
 import { recordPayment, deletePayment } from '../services/paymentService.js';
 import { getTenantBalance } from '../engine/ledger.js';
 
@@ -123,13 +123,6 @@ export function initPaymentModal() {
       const u = AppState.units.find(u => u.id === t.unitId);
       return `<option value="${t.id}">${esc(t.name)} — ${b ? esc(b.name) : ''} ${u ? esc(u.number) : ''}</option>`;
     }).join('');
-
-  // Add change event listener for fillPayDetail
-  tenSel.onchange = fillPayDetail;
-
-  // Add click event listener for save button
-  const saveBtn = document.getElementById('btn-save-payment');
-  if (saveBtn) saveBtn.onclick = savePaymentForm;
 
   // Reset fields
   const dateEl = document.getElementById('pm-date');
