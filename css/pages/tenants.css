@@ -1,0 +1,214 @@
+/* ============================================================
+   PropOS — Tenants Page Styles
+   ============================================================ */
+
+/* ── TENANT TABLE ── */
+.tenant-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tenant-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent-bg);
+  border: 1px solid rgba(108,99,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-light);
+  flex-shrink: 0;
+  font-family: var(--font-display);
+}
+
+.tenant-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.tenant-id {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.lease-warning {
+  font-size: 0.68rem;
+  color: var(--red);
+  margin-top: 2px;
+}
+
+/* ── HEALTH SCORE ── */
+.health-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.health-score.excellent { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+.health-score.good      { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+.health-score.at-risk   { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+.health-score.high-risk { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+
+/* ── TENANT PROFILE ── */
+.profile-header {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.profile-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+}
+
+.profile-avatar-lg {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--accent-bg);
+  border: 2px solid rgba(108,99,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+
+.profile-info { flex: 1; min-width: 0; }
+
+.profile-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.profile-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.profile-meta-item strong {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+/* ── PROFILE TABS ── */
+.profile-tabs-content > div {
+  display: none;
+}
+.profile-tabs-content > div.active {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+/* ── LEDGER ── */
+.ledger-wrap {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.ledger-header {
+  display: grid;
+  grid-template-columns: 100px 1fr 110px 110px 120px;
+  background: var(--bg-hover);
+  border-bottom: 1px solid var(--border);
+}
+
+.ledger-header div {
+  padding: 10px 14px;
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.ledger-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 110px 110px 120px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.ledger-row:last-child { border-bottom: none; }
+.ledger-row:hover { background: var(--bg-hover); }
+
+.ledger-row div {
+  padding: 11px 14px;
+  font-size: 0.83rem;
+  vertical-align: middle;
+}
+
+.ledger-row.charge div   { }
+.ledger-row.payment div  { }
+.ledger-row.openbal div  { background: rgba(251,191,36,0.05); }
+
+.ledger-bal-positive { color: var(--red);   font-weight: 600; }
+.ledger-bal-zero     { color: var(--green); font-weight: 600; }
+.ledger-bal-negative { color: var(--blue);  font-weight: 600; }
+
+/* ── PAYMENT HISTORY TABLE ── */
+.pay-method-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.67rem;
+  font-weight: 600;
+}
+.pay-mpesa    { background: var(--green-bg); color: var(--green); }
+.pay-bank     { background: var(--blue-bg);  color: var(--blue);  }
+.pay-cash     { background: var(--amber-bg); color: var(--amber); }
+.pay-cheque   { background: var(--accent-bg);color: var(--accent-light); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .profile-header  { flex-direction: column; }
+  .profile-actions { width: 100%; }
+  .ledger-header,
+  .ledger-row      { grid-template-columns: 90px 1fr 90px 90px; }
+  .ledger-header div:nth-child(3),
+  .ledger-row div:nth-child(3) { display: none; }
+}

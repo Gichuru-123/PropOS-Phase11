@@ -1,0 +1,118 @@
+/* ============================================================
+   PropOS — Payments, Invoices, Statements Page Styles
+   ============================================================ */
+
+/* ── PAYMENT METHOD CHIPS ── */
+.pay-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.pay-mpesa       { background: var(--green-bg);  color: var(--green);        border: 1px solid var(--green-border); }
+.pay-banktransfer{ background: var(--blue-bg);   color: var(--blue);         border: 1px solid var(--blue-border); }
+.pay-cash        { background: var(--amber-bg);  color: var(--amber);        border: 1px solid var(--amber-border); }
+.pay-cheque      { background: var(--accent-bg); color: var(--accent-light); border: 1px solid rgba(108,99,255,0.25); }
+
+/* ── BANK SMS CHIPS ── */
+.bank-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.bank-mpesa  { background: rgba(34,211,165,0.12); color: var(--green); }
+.bank-equity { background: rgba(56,189,248,0.12); color: var(--blue); }
+.bank-kcb    { background: rgba(255,85,119,0.10); color: var(--red); }
+.bank-coop   { background: rgba(251,191,36,0.12); color: var(--amber); }
+.bank-airtel { background: rgba(255,85,119,0.10); color: var(--red); }
+.bank-ncba   { background: rgba(108,99,255,0.12); color: var(--accent-light); }
+.bank-other  { background: var(--bg-hover);       color: var(--text-muted); }
+
+/* ── INVOICE PREVIEW ── */
+.invoice-preview {
+  background: #f7f6f2;
+  color: #1a1714;
+  padding: 32px;
+  border-radius: var(--r-lg);
+  font-family: var(--font-body);
+}
+.inv-company  { font-size: 1.1rem; font-weight: 700; color: #c8622a; }
+.inv-owner    { font-size: 0.75rem; color: #8a837a; margin-top: 2px; }
+.inv-title    { font-size: 1rem; font-weight: 700; color: #1a1714; }
+.inv-table    { width: 100%; border-collapse: collapse; margin: 14px 0; }
+.inv-table th { background: #ede9df; padding: 8px 12px; font-size: 0.68rem;
+                text-transform: uppercase; letter-spacing: 1.5px; text-align: left; color: #6b6560; }
+.inv-table td { padding: 10px 12px; border-bottom: 1px solid #dcd8cf; font-size: 0.875rem; }
+.inv-total    { display: flex; justify-content: space-between;
+                padding: 12px 0; font-weight: 700; font-size: 1rem;
+                border-top: 2px solid #1a1714; margin-top: 6px; }
+
+/* ── STATEMENT / LEDGER ── */
+.ledger-table { width: 100%; border-collapse: collapse; }
+.ledger-table th {
+  font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-muted); padding: 10px 14px;
+  text-align: left; border-bottom: 1px solid var(--border);
+  background: var(--bg-hover); font-weight: 600;
+}
+.ledger-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 0.83rem; }
+.ledger-table tr:last-child td { border-bottom: none; }
+.ledger-table tbody tr:hover td { background: var(--bg-hover); }
+.ledger-row-ob     { background: rgba(251,191,36,0.04); }
+.ledger-row-charge { }
+.ledger-row-pay    { }
+.bal-positive { color: var(--red);   font-weight: 600; }
+.bal-zero     { color: var(--green); font-weight: 600; }
+.bal-negative { color: var(--blue);  font-weight: 600; }
+
+/* ── SMS PARSER ── */
+.sms-drop {
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  background: var(--bg-hover);
+  transition: all var(--transition);
+}
+.sms-drop:focus-within {
+  border-color: var(--accent);
+  background: var(--bg-active);
+}
+.sms-textarea {
+  width: 100%; min-height: 110px;
+  background: transparent; border: none; outline: none;
+  font-family: var(--font-body); font-size: 0.875rem;
+  color: var(--text-primary); resize: vertical; line-height: 1.5;
+}
+.parse-result {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px; margin-top: 14px;
+}
+.parse-field {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem;
+}
+.parse-field:last-child { border-bottom: none; }
+.parse-key { color: var(--text-muted); font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; }
+.parse-val { font-weight: 600; color: var(--text-primary); }
+.parse-val.match   { color: var(--green); }
+.parse-val.nomatch { color: var(--amber); }
+
+/* ── RECEIPT ── */
+.receipt-area {
+  background: #f7f6f2;
+  color: #1a1714;
+  padding: 28px;
+  border-radius: var(--r-lg);
+  font-family: var(--font-body);
+}

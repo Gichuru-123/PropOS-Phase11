@@ -1,0 +1,248 @@
+/* ============================================================
+   PropOS — Activity Log Page Styles (Phase 10)
+   ============================================================ */
+
+/* ── Page header ─────────────────────────────────────────── */
+.al-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+.al-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.al-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* ── KPI strip ───────────────────────────────────────────── */
+.al-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) 2fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+@media (max-width: 900px) {
+  .al-kpis { grid-template-columns: 1fr 1fr; }
+  .al-kpi-wide { grid-column: span 2; }
+}
+.al-kpi-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 20px;
+  transition: border-color var(--transition);
+}
+.al-kpi-card:hover { border-color: var(--border-strong); }
+.al-kpi-val {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+.al-kpi-lbl {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── Filters bar ─────────────────────────────────────────── */
+.al-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.al-filters .search-input {
+  flex: 1;
+  min-width: 200px;
+}
+.al-filter-select { width: auto; min-width: 130px; }
+.al-date-input    { width: 140px; }
+
+/* ── Result count ────────────────────────────────────────── */
+.al-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.al-limit-warn {
+  color: var(--amber);
+  font-size: 0.75rem;
+}
+
+/* ── Table overrides ─────────────────────────────────────── */
+.al-row {
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.al-row:hover { background: var(--bg-hover); }
+.al-row-open  { background: var(--bg-active) !important; }
+
+.al-cell-time {
+  white-space: nowrap;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+.al-user-name {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.al-user-role {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+.al-cell-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  max-width: 340px;
+}
+.al-cell-expand {
+  text-align: center;
+}
+.al-empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ── Expand button ───────────────────────────────────────── */
+.al-expand-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.al-expand-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Diff row ────────────────────────────────────────────── */
+.al-diff-row td {
+  padding: 0 !important;
+  background: var(--bg-base);
+  border-bottom: 2px solid var(--accent);
+}
+.al-diff-inner {
+  padding: 14px 20px 18px;
+}
+.al-diff-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.al-mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+.al-diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 700px) {
+  .al-diff-grid { grid-template-columns: 1fr; }
+}
+.al-diff-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 5px;
+}
+.al-diff-label-old { color: var(--red); }
+.al-diff-label-new { color: var(--green); }
+.al-diff-box {
+  border-radius: var(--r-sm);
+  padding: 8px 10px;
+  word-break: break-all;
+}
+.al-diff-box-old {
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+}
+.al-diff-box-new {
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+}
+.al-diff-pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--text-secondary);
+}
+
+/* ── Action badges ───────────────────────────────────────── */
+.al-action-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.al-ab-green  { background: var(--green-bg);   color: var(--green);        border: 1px solid var(--green-border); }
+.al-ab-blue   { background: var(--blue-bg);    color: var(--blue);         border: 1px solid var(--blue-border); }
+.al-ab-red    { background: var(--red-bg);     color: var(--red);          border: 1px solid var(--red-border); }
+.al-ab-amber  { background: var(--amber-bg);   color: var(--amber);        border: 1px solid var(--amber-border); }
+.al-ab-purple { background: rgba(167,139,250,.12); color: var(--accent-light); border: 1px solid rgba(167,139,250,.25); }
+.al-ab-teal   { background: var(--green-bg);   color: var(--green);        border: 1px solid var(--green-border); }
+.al-ab-muted  { background: var(--bg-hover);   color: var(--text-muted);   border: 1px solid var(--border); }
+
+/* ── Entity badge ────────────────────────────────────────── */
+.al-entity-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--bg-active);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+/* ── Pagination ──────────────────────────────────────────── */
+.al-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 8px 0;
+}
+.al-pager-info {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}

@@ -1,0 +1,199 @@
+/* ============================================================
+   PropOS — Maintenance Page Styles (Phase 11)
+   ============================================================ */
+
+/* ── KPI strip ───────────────────────────────────────────── */
+.mj-kpis {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+@media (max-width: 900px) { .mj-kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .mj-kpis { grid-template-columns: 1fr 1fr; } }
+
+.mj-kpi {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  transition: border-color var(--transition);
+}
+.mj-kpi:hover { border-color: var(--border-strong); }
+.mj-kpi-urgent { border-color: var(--red-border) !important; background: var(--red-bg); }
+.mj-kpi-warn   { border-color: var(--amber-border) !important; background: var(--amber-bg); }
+
+.mj-kpi-val {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.mj-kpi-urgent .mj-kpi-val { color: var(--red); }
+.mj-kpi-warn   .mj-kpi-val { color: var(--amber); }
+
+.mj-kpi-lbl {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── View toggle ─────────────────────────────────────────── */
+.mj-view-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.mj-vt-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-body);
+}
+.mj-vt-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.mj-vt-active    { background: var(--bg-active) !important; color: var(--text-primary) !important; }
+
+/* ── Kanban board ────────────────────────────────────────── */
+.mj-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1000px) { .mj-board { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .mj-board { grid-template-columns: 1fr; } }
+
+.mj-col {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.mj-col-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+.mj-col-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.mj-col-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--bg-active);
+  color: var(--text-muted);
+  border-radius: 999px;
+  padding: 1px 8px;
+  min-width: 22px;
+  text-align: center;
+}
+.mj-col-body  { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.mj-col-empty { text-align: center; padding: 28px 12px; font-size: 0.78rem; color: var(--text-muted); }
+
+/* ── Job card ────────────────────────────────────────────── */
+.mj-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.mj-card:hover {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.mj-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.mj-cat-icon { font-size: 1rem; }
+
+.mj-card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.mj-card-loc,
+.mj-card-assigned,
+.mj-card-due,
+.mj-card-photos {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+.mj-overdue { color: var(--red) !important; font-weight: 600; }
+
+.mj-card-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.mj-adv-btn {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+.mj-adv-btn:hover {
+  background: var(--accent-bg) !important;
+}
+
+/* ── Priority badges ─────────────────────────────────────── */
+.mj-priority {
+  display: inline-block;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+.mj-p-muted  { background: var(--bg-active);   color: var(--text-muted);  border: 1px solid var(--border); }
+.mj-p-blue   { background: var(--blue-bg);     color: var(--blue);        border: 1px solid var(--blue-border); }
+.mj-p-amber  { background: var(--amber-bg);    color: var(--amber);       border: 1px solid var(--amber-border); }
+.mj-p-red    { background: var(--red-bg);      color: var(--red);         border: 1px solid var(--red-border); }
+
+/* ── Status badges ───────────────────────────────────────── */
+.mj-status-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.mj-s-open        { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+.mj-s-in_progress { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+.mj-s-done        { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+.mj-s-closed      { background: var(--bg-active); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* ── Empty state ─────────────────────────────────────────── */
+.mj-empty-state {
+  text-align: center;
+  padding: 100px 20px;
+  color: var(--text-muted);
+}

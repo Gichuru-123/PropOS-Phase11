@@ -1,0 +1,248 @@
+/* ============================================================
+   PropOS — Buildings & Units Page Styles
+   ============================================================ */
+
+/* ── BUILDING CARDS GRID ── */
+.bldg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.bldg-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.bldg-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+}
+.bldg-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+}
+
+.bldg-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.bldg-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.bldg-location {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.bldg-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.bldg-card:hover .bldg-actions { opacity: 1; }
+
+.bldg-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.bstat {
+  text-align: center;
+}
+.bstat strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+.bstat span {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 3px;
+  display: block;
+}
+
+.bldg-occupancy-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.bldg-occupancy-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+/* ── BUILDING DETAIL ── */
+.bdetail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.bdetail-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.bdetail-location {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── UNITS GRID ── */
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.unit-tile {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 12px 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.unit-tile::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.unit-tile:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+/* Status colours */
+.unit-tile.occupied  { border-color: rgba(34,211,165,0.2); }
+.unit-tile.vacant    { opacity: 0.55; }
+.unit-tile.arrears   { border-color: rgba(255,85,119,0.25); }
+.unit-tile.credit    { border-color: rgba(56,189,248,0.2); }
+.unit-tile.maintenance { border-color: rgba(251,191,36,0.25); }
+
+.unit-tile.occupied::before    { background: var(--green); }
+.unit-tile.vacant::before      { background: var(--text-muted); }
+.unit-tile.arrears::before     { background: var(--red); }
+.unit-tile.credit::before      { background: var(--blue); }
+.unit-tile.maintenance::before { background: var(--amber); }
+
+.unit-number {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.unit-type {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.unit-tenant {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unit-rent {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.unit-balance {
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.unit-tile-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.unit-tile:hover .unit-tile-actions { opacity: 1; }
+
+/* ── EMPTY STATE ── */
+.bldg-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-muted);
+}
+.bldg-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+.bldg-empty h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.bldg-empty p {
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .bldg-grid   { grid-template-columns: 1fr; }
+  .units-grid  { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .bldg-stats  { grid-template-columns: repeat(2, 1fr); }
+}

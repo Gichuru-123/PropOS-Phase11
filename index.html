@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PropOS · Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/variables.css"/>
+<link rel="stylesheet" href="css/reset.css"/>
+<link rel="stylesheet" href="css/components.css"/>
+<style>
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-base);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Ambient background glow */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(108,99,255,0.12), transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -10%;
+    right: -5%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(34,211,165,0.06), transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-wrap {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.4s ease;
+  }
+
+  /* Logo */
+  .login-logo {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .login-logo-mark {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+  .login-logo-mark span {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .login-logo-sub {
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* Card */
+  .login-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-xl);
+    padding: 36px;
+    box-shadow: var(--shadow-lg), 0 0 0 1px rgba(108,99,255,0.05);
+  }
+
+  .login-heading {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .login-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+
+  .login-card .form-input {
+    font-size: 0.92rem;
+    padding: 12px 14px;
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 13px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  .login-forgot {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .login-forgot a {
+    color: var(--accent-light);
+    cursor: pointer;
+    transition: color var(--transition);
+  }
+  .login-forgot a:hover { color: var(--accent); }
+
+  /* Error banner */
+  .login-error {
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+    border-radius: var(--r);
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: var(--red);
+    margin-bottom: 16px;
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .login-error.visible { display: block; }
+
+  /* Success banner for password reset */
+  .login-success {
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    border-radius: var(--r);
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: var(--green);
+    margin-bottom: 16px;
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+  .login-success.visible { display: block; }
+
+  /* Divider */
+  .login-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+  .login-divider::before,
+  .login-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Forgot password view */
+  #view-forgot { display: none; }
+  #view-forgot.active { display: block; }
+  #view-login.hidden  { display: none; }
+
+  /* Footer */
+  .login-footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  /* First setup notice */
+  .setup-notice {
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    border-radius: var(--r);
+    padding: 12px 16px;
+    font-size: 0.8rem;
+    color: var(--amber);
+    margin-bottom: 20px;
+    line-height: 1.5;
+    display: none;
+  }
+  .setup-notice.visible { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-wrap">
+
+  <!-- Logo -->
+  <div class="login-logo">
+    <div class="login-logo-mark">Prop<span>OS</span></div>
+    <div class="login-logo-sub">Property Management Suite</div>
+  </div>
+
+  <!-- Login Card -->
+  <div class="login-card">
+
+    <!-- First-time setup notice -->
+    <div class="setup-notice" id="setup-notice">
+      ⚙️ <strong>First-time setup:</strong> No admin account detected.
+      Sign in with Firebase and your admin profile will be created automatically.
+    </div>
+
+    <!-- Error / Success banners -->
+    <div class="login-error"   id="login-error"></div>
+    <div class="login-success" id="login-success"></div>
+
+    <!-- LOGIN VIEW -->
+    <div id="view-login">
+      <div class="login-heading">Welcome back</div>
+      <div class="login-sub">Sign in to your PropOS account</div>
+
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input type="email" class="form-input" id="login-email"
+               placeholder="you@example.com" autocomplete="email"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-password"
+               placeholder="Enter your password" autocomplete="current-password"/>
+      </div>
+
+      <button class="btn btn-primary login-btn" id="login-btn" onclick="handleLogin()">
+        Sign In
+      </button>
+
+      <div class="login-forgot">
+        <a onclick="showForgot()">Forgot your password?</a>
+      </div>
+    </div>
+
+    <!-- FORGOT PASSWORD VIEW -->
+    <div id="view-forgot">
+      <div class="login-heading">Reset password</div>
+      <div class="login-sub">Enter your email and we'll send a reset link</div>
+
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input type="email" class="form-input" id="reset-email"
+               placeholder="you@example.com"/>
+      </div>
+
+      <button class="btn btn-primary login-btn" onclick="handleReset()">
+        Send Reset Link
+      </button>
+
+      <div class="login-forgot" style="margin-top:14px;">
+        <a onclick="showLogin()">← Back to sign in</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="login-footer">
+    PropOS v6 &nbsp;·&nbsp; Property Management Suite
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script type="module">
+import { login, resetPassword, watchAuthState } from './js/auth.js';
+import { toast } from './js/components/toast.js';
+
+// Check if already logged in → redirect to app
+watchAuthState(
+  (user, profile) => {
+    window.location.href = 'app.html';
+  },
+  () => {
+    // Not logged in — stay on this page
+  }
+);
+
+// Handle login
+window.handleLogin = async function() {
+  const email    = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const btn      = document.getElementById('login-btn');
+  const errEl    = document.getElementById('login-error');
+
+  if (!email || !password) {
+    showError('Please enter your email and password.');
+    return;
+  }
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+  errEl.classList.remove('visible');
+
+  try {
+    await login(email, password);
+    // watchAuthState will redirect to app.html
+  } catch (err) {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    const messages = {
+      'auth/user-not-found':      'No account found with this email.',
+      'auth/wrong-password':      'Incorrect password. Please try again.',
+      'auth/invalid-email':       'Please enter a valid email address.',
+      'auth/too-many-requests':   'Too many attempts. Please wait a moment.',
+      'auth/invalid-credential':  'Incorrect email or password.'
+    };
+    showError(messages[err.code] || err.message || 'Sign in failed. Please try again.');
+  }
+};
+
+// Handle password reset
+window.handleReset = async function() {
+  const email = document.getElementById('reset-email').value.trim();
+  if (!email) { showError('Please enter your email address.'); return; }
+  try {
+    await resetPassword(email);
+    document.getElementById('login-success').textContent =
+      'Reset link sent! Check your inbox.';
+    document.getElementById('login-success').classList.add('visible');
+    document.getElementById('login-error').classList.remove('visible');
+    setTimeout(() => showLogin(), 3000);
+  } catch (err) {
+    showError('Could not send reset email. Check the address and try again.');
+  }
+};
+
+// Toggle views
+window.showForgot = function() {
+  document.getElementById('view-login').classList.add('hidden');
+  document.getElementById('view-forgot').classList.add('active');
+  document.getElementById('login-error').classList.remove('visible');
+};
+window.showLogin = function() {
+  document.getElementById('view-login').classList.remove('hidden');
+  document.getElementById('view-forgot').classList.remove('active');
+  document.getElementById('login-error').classList.remove('visible');
+  document.getElementById('login-success').classList.remove('visible');
+};
+
+function showError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('view-forgot').classList.contains('active')) {
+      window.handleReset();
+    } else {
+      window.handleLogin();
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# PropOS — Netlify Configuration
+
+[build]
+  publish = "."
+
+# Redirect all routes to app.html for SPA behaviour
+[[redirects]]
+  from = "/app/*"
+  to   = "/app.html"
+  status = 200
+
+# Beem Africa SMS API proxy (avoids CORS in browser)
+[[redirects]]
+  from = "/beem-proxy/*"
+  to   = "https://apisms.beem.africa/v1/:splat"
+  status = 200
+  force  = true
+  headers = { X-From = "Netlify" }
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+    Permissions-Policy     = "camera=(), microphone=(), geolocation=()"

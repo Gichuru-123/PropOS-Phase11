@@ -1,0 +1,86 @@
+/* ============================================================
+   PropOS Design Tokens — Phase 0 Specification
+   ============================================================ */
+
+:root {
+  /* Backgrounds */
+  --bg-base:       #0a0b0f;
+  --bg-surface:    #111318;
+  --bg-elevated:   #161820;
+  --bg-hover:      #1c1f28;
+  --bg-active:     #232736;
+
+  /* Text */
+  --text-primary:   #f0f2ff;
+  --text-secondary: #b8bcd4;
+  --text-muted:     #6b7094;
+
+  /* Accent */
+  --accent:         #6c63ff;
+  --accent-light:   #a78bfa;
+  --accent-glow:    rgba(108, 99, 255, 0.3);
+  --accent-bg:      rgba(108, 99, 255, 0.1);
+
+  /* Semantic colours */
+  --green:          #22d3a5;
+  --green-dark:     #0f7a60;
+  --green-bg:       rgba(34, 211, 165, 0.1);
+  --green-border:   rgba(34, 211, 165, 0.25);
+
+  --red:            #ff5577;
+  --red-dark:       #8b1a30;
+  --red-bg:         rgba(255, 85, 119, 0.1);
+  --red-border:     rgba(255, 85, 119, 0.25);
+
+  --amber:          #fbbf24;
+  --amber-dark:     #92620a;
+  --amber-bg:       rgba(251, 191, 36, 0.1);
+  --amber-border:   rgba(251, 191, 36, 0.25);
+
+  --blue:           #38bdf8;
+  --blue-dark:      #0c4a6e;
+  --blue-bg:        rgba(56, 189, 248, 0.1);
+  --blue-border:    rgba(56, 189, 248, 0.25);
+
+  /* Borders */
+  --border:         rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+
+  /* Shadows */
+  --shadow-sm:      0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow:         0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg:      0 12px 48px rgba(0, 0, 0, 0.6);
+  --shadow-accent:  0 4px 20px rgba(108, 99, 255, 0.35);
+
+  /* Typography */
+  --font-display:   'Syne', sans-serif;
+  --font-body:      'DM Sans', sans-serif;
+  --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing scale */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* Border radius */
+  --r-sm:  6px;
+  --r:     10px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+
+  /* Layout */
+  --sidebar-w:      240px;
+  --topbar-h:       64px;
+  --content-max:    1400px;
+
+  /* Transitions */
+  --transition:     0.2s ease;
+  --transition-lg:  0.35s ease;
+}
