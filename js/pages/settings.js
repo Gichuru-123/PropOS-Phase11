@@ -69,32 +69,52 @@ export function render() {
         <button class="btn btn-primary" style="margin-top:14px" onclick="saveSettingsForm()">Save Changes</button>
       </div>
 
-      <!-- Africa's Talking SMS -->
+      <!-- Beem Africa SMS -->
       <div class="card">
-        <div class="section-title" style="margin-bottom:8px">📡 Africa's Talking — SMS</div>
+        <div class="section-title" style="margin-bottom:8px">📡 Beem Africa — SMS</div>
         <div style="background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--r);padding:10px 13px;font-size:0.78rem;color:var(--amber);margin-bottom:14px;line-height:1.5;">
-          ⚠️ SMS requires this app to be hosted on a web server (not <code>file://</code>).
-          Live Server on localhost works. Netlify deployment works.
-          Phone numbers must be in <strong>+254XXXXXXXXX</strong> format — the app auto-converts.
+          ⚠️ SMS requires this app to be deployed on Netlify (not <code>file://</code>).
+          Get your API key &amp; secret from <strong>app.beem.africa → Developer API</strong>.
+          Phone numbers are auto-converted to <strong>254XXXXXXXXX</strong> format.
         </div>
         <div class="form-group">
           <label class="form-label">API Key</label>
-          <input type="password" class="form-input" id="s-atkey"
-            value="${esc(s.atApiKey)}" placeholder="Your Africa's Talking API key"/>
+          <input type="password" class="form-input" id="s-beem-key"
+            value="${esc(s.beemApiKey)}" placeholder="Beem Africa API key"/>
         </div>
         <div class="form-group">
-          <label class="form-label">Username</label>
-          <input type="text" class="form-input" id="s-atuser"
-            value="${esc(s.atUsername||'sandbox')}" placeholder="sandbox or your AT username"/>
+          <label class="form-label">Secret Key</label>
+          <input type="password" class="form-input" id="s-beem-secret"
+            value="${esc(s.beemSecretKey)}" placeholder="Beem Africa secret key"/>
         </div>
         <div class="form-group">
-          <label class="form-label">Sender ID (optional)</label>
-          <input type="text" class="form-input" id="s-atsender"
-            value="${esc(s.atSenderId)}" placeholder="e.g. PROPMANAGER (must be approved by AT)"/>
+          <label class="form-label">Sender Name</label>
+          <input type="text" class="form-input" id="s-beem-sender"
+            value="${esc(s.beemSenderName||'PROPMAN')}"
+            placeholder="e.g. PROPMAN (must be registered with Beem)" maxlength="11"/>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-primary" onclick="saveSettingsForm()">Save</button>
-          <button class="btn btn-ghost" onclick="testATConnection()">🔌 Test Connection</button>
+          <button class="btn btn-ghost" onclick="testBeemConnection()">🔌 Test Connection</button>
+        </div>
+      </div>
+
+      <!-- WhatsApp & Notification Templates -->
+      <div class="card">
+        <div class="section-title" style="margin-bottom:8px">💬 WhatsApp & Message Templates</div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:14px;line-height:1.5">
+          WhatsApp sends open pre-filled chats via <code>wa.me</code> links — no API key required.
+          Templates are stored in Firebase and applied across all notification types.
+        </p>
+        <div class="form-group">
+          <label class="form-label">WhatsApp Business Number</label>
+          <input type="text" class="form-input" id="s-wa"
+            value="${esc(s.whatsappNumber||'')}"
+            placeholder="+254700000000 (for display & links)"/>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="saveSettingsForm()">Save</button>
+          <button class="btn btn-ghost" onclick="(async()=>{ await import('./notifications.js'); window.openNotifTemplateEditor(); })()">✏️ Edit Message Templates</button>
         </div>
       </div>
 
@@ -136,15 +156,16 @@ window.saveSettingsForm = async function() {
   btn.classList.add('loading'); btn.disabled = true;
   try {
     await saveSettings({
-      ownerName:  document.getElementById('s-owner')?.value   || '',
-      ownerPhone: document.getElementById('s-phone')?.value   || '',
-      ownerEmail: document.getElementById('s-email')?.value   || '',
-      company:    document.getElementById('s-company')?.value || '',
-      atApiKey:   document.getElementById('s-atkey')?.value   || '',
-      atUsername: document.getElementById('s-atuser')?.value  || 'sandbox',
-      atSenderId: document.getElementById('s-atsender')?.value|| '',
-      dueDay:     document.getElementById('s-dueday')?.value  || 1,
-      graceDays:  document.getElementById('s-grace')?.value   || 5
+      ownerName:      document.getElementById('s-owner')?.value     || '',
+      ownerPhone:     document.getElementById('s-phone')?.value     || '',
+      ownerEmail:     document.getElementById('s-email')?.value     || '',
+      company:        document.getElementById('s-company')?.value   || '',
+      beemApiKey:     document.getElementById('s-beem-key')?.value    || '',
+      beemSecretKey:  document.getElementById('s-beem-secret')?.value || '',
+      beemSenderName: document.getElementById('s-beem-sender')?.value || 'PROPMAN',
+      whatsappNumber: document.getElementById('s-wa')?.value        || '',
+      dueDay:         document.getElementById('s-dueday')?.value    || 1,
+      graceDays:      document.getElementById('s-grace')?.value     || 5
     });
     // Sync to AppState for the engine
     AppState.settings.dueDay    = Number(document.getElementById('s-dueday')?.value) || 1;
@@ -158,27 +179,29 @@ window.saveSettingsForm = async function() {
   }
 };
 
-// ── TEST AT CONNECTION ─────────────────────────────────────
-window.testATConnection = async function() {
-  const apiKey   = document.getElementById('s-atkey')?.value.trim();
-  const username = document.getElementById('s-atuser')?.value.trim() || 'sandbox';
-  if (!apiKey) return toast.error('Enter your API key first');
-  toast.info('Testing Africa\'s Talking connection…');
+// ── TEST BEEM CONNECTION ───────────────────────────────────
+window.testBeemConnection = async function() {
+  const apiKey    = document.getElementById('s-beem-key')?.value.trim();
+  const secretKey = document.getElementById('s-beem-secret')?.value.trim();
+  if (!apiKey || !secretKey) return toast.error('Enter both API key and secret key first.');
+  toast.info('Testing Beem Africa connection…');
   try {
-    const resp = await fetch(`/at-proxy/user?username=${encodeURIComponent(username)}`, {
-      method: 'GET',
-      headers: { 'apiKey': apiKey, 'Accept': 'application/json' }
+    const credentials = btoa(`${apiKey}:${secretKey}`);
+    const resp = await fetch('/beem-proxy/balance', {
+      method:  'GET',
+      headers: { 'Authorization': `Basic ${credentials}`, 'Accept': 'application/json' }
     });
-    const data = await resp.json();
-    if (data?.UserData) {
-      toast.success(`✅ Connected! Balance: ${data.UserData.balance}`);
+    if (resp.status === 200) {
+      const data = await resp.json();
+      const balance = data?.data?.credit_balance ?? data?.balance ?? '—';
+      toast.success(`✅ Connected! Credit balance: ${balance}`);
     } else if (resp.status === 401 || resp.status === 403) {
-      toast.error('❌ Invalid API key or username');
+      toast.error('❌ Invalid API key or secret key.');
     } else {
-      toast.warning('⚠ Unexpected response — check your credentials');
+      toast.warning(`⚠ Unexpected response (${resp.status}) — check your credentials.`);
     }
   } catch(e) {
-    toast.error('❌ Connection failed — ensure you are on a hosted server, not file://');
+    toast.error('❌ Connection failed — ensure you are on a deployed Netlify site, not file://');
   }
 };
 

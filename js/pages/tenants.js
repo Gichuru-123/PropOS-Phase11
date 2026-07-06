@@ -7,7 +7,7 @@ import { AppState, ksh, getToday, monthLabel } from '../store.js';
 import { router } from '../router.js';
 import { can } from '../auth.js';
 import { toast } from '../components/toast.js';
-import { openModal, closeModal, confirmDialog } from '../components/modal.js';
+import { closeModal, confirmDialog } from '../components/modal.js';
 import { addTenant, updateTenant, deleteTenant, normalisePhone } from '../services/tenantService.js';
 import { getVacantUnits } from '../services/unitService.js';
 import { getTenantBalance, getStatusThisMonth, calculateHealthScore } from '../engine/ledger.js';
@@ -432,7 +432,10 @@ window.quickPayTenant = function(id) {
   setTimeout(() => {
     openModal('m-payment');
     const sel = document.getElementById('pm-tenant');
-    if (sel) { sel.value = id; sel.dispatchEvent(new Event('change')); }
+    if (sel) {
+      sel.value = id;
+      sel.dispatchEvent(new Event('change'));
+    }
   }, 200);
 };
 

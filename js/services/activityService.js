@@ -9,6 +9,7 @@ import {
   orderBy, limit, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { currentUser, currentProfile } from '../auth.js';
+import { AppState } from '../store.js';
 
 const COL = 'activityLog';
 
@@ -34,15 +35,15 @@ export async function logActivity(action, entityType, entityId, description, old
   }
 }
 
-// ── Real-time listener (last 100 entries) ─────────────────
+// ── Real-time listener (last 500 entries) ─────────────────
 export function listenActivity(onUpdate) {
   const q = query(
     collection(db, COL),
     orderBy('timestamp', 'desc'),
-    limit(100)
+    limit(500)
   );
   return onSnapshot(q, snap => {
-    const entries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    if (onUpdate) onUpdate(entries);
+    AppState.activityLog = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (onUpdate) onUpdate();
   }, err => console.error('Activity listener error:', err));
 }

@@ -12,19 +12,20 @@ const COL    = 'settings';
 
 // Default settings
 export const DEFAULT_SETTINGS = {
-  ownerName:   '',
-  ownerPhone:  '',
-  ownerEmail:  '',
-  company:     'PropOS',
-  logoURL:     '',
-  atApiKey:    '',
-  atUsername:  'sandbox',
-  atSenderId:  '',
-  dueDay:      1,
-  graceDays:   5,
-  currency:    'KSh',
-  timezone:    'Africa/Nairobi',
-  dateFormat:  'DD/MM/YYYY'
+  ownerName:       '',
+  ownerPhone:      '',
+  ownerEmail:      '',
+  company:         'PropOS',
+  logoURL:         '',
+  beemApiKey:      '',
+  beemSecretKey:   '',
+  beemSenderName:  'PROPMAN',
+  whatsappNumber:  '',   // WhatsApp Business number e.g. +254700000000
+  dueDay:          1,
+  graceDays:       5,
+  currency:        'KSh',
+  timezone:        'Africa/Nairobi',
+  dateFormat:      'DD/MM/YYYY'
 };
 
 // In-memory cache
@@ -56,16 +57,17 @@ export function listenSettings(onUpdate) {
 // ── Save settings ──────────────────────────────────────────
 export async function saveSettings(data) {
   const payload = {
-    ownerName:  data.ownerName  || '',
-    ownerPhone: data.ownerPhone || '',
-    ownerEmail: data.ownerEmail || '',
-    company:    data.company    || 'PropOS',
-    atApiKey:   data.atApiKey   || '',
-    atUsername: data.atUsername || 'sandbox',
-    atSenderId: data.atSenderId || '',
-    dueDay:     Number(data.dueDay)    || 1,
-    graceDays:  Number(data.graceDays) || 5,
-    updatedAt:  serverTimestamp()
+    ownerName:      data.ownerName       || '',
+    ownerPhone:     data.ownerPhone      || '',
+    ownerEmail:     data.ownerEmail      || '',
+    company:        data.company         || 'PropOS',
+    beemApiKey:     data.beemApiKey      || '',
+    beemSecretKey:  data.beemSecretKey   || '',
+    beemSenderName: data.beemSenderName  || 'PROPMAN',
+    whatsappNumber: data.whatsappNumber  || '',
+    dueDay:         Number(data.dueDay)    || 1,
+    graceDays:      Number(data.graceDays) || 5,
+    updatedAt:      serverTimestamp()
   };
   await setDoc(doc(db, COL, DOC_ID), payload, { merge: true });
   appSettings = { ...appSettings, ...payload };

@@ -4,7 +4,7 @@
 import { AppState, ksh, getCurMonth, monthLabel, getToday } from '../store.js';
 import { can } from '../auth.js';
 import { toast } from '../components/toast.js';
-import { openModal, closeModal } from '../components/modal.js';
+import { closeModal } from '../components/modal.js';
 import { getTenantBalance, getMonthlyInvoice } from '../engine/ledger.js';
 import { appSettings } from '../services/settingsService.js';
 
@@ -206,7 +206,10 @@ window.quickPayFromInvoice = function(tenantId) {
   setTimeout(() => {
     openModal('m-payment');
     const sel = document.getElementById('pm-tenant');
-    if (sel) { sel.value = tenantId; window.fillPayDetail(); }
+    if (sel) {
+      sel.value = tenantId;
+      sel.dispatchEvent(new Event('change'));
+    }
   }, 300);
 };
 

@@ -124,6 +124,7 @@ let currentParsed=null;
 
 // ── TENANT DROPDOWN HELPER ─────────────────────────────────
 function buildTenantOptions(matched) {
+  // Debug — log what we have
   console.log('[SMS Parser] AppState.tenants count:', AppState.tenants.length);
   console.log('[SMS Parser] Sample tenant:', AppState.tenants[0]);
 
@@ -131,13 +132,12 @@ function buildTenantOptions(matched) {
     return '<option value="">No tenants found — check Firebase connection</option>';
   }
 
-  // Show ALL tenants with a unit — no status filter
   const sorted = AppState.tenants
-    .filter(t => t.unitId)
-    .sort((a, b) => {
-      const uA = AppState.units.find(u => u.id === a.unitId)?.number || '';
-      const uB = AppState.units.find(u => u.id === b.unitId)?.number || '';
-      return uA.localeCompare(uB, undefined, { numeric: true });
+    .filter(t=>t.unitId&&t.status!=='vacated')
+    .sort((a,b)=>{
+      const uA=AppState.units.find(u=>u.id===a.unitId)?.number||'';
+      const uB=AppState.units.find(u=>u.id===b.unitId)?.number||'';
+      return uA.localeCompare(uB,undefined,{numeric:true});
     });
   return '<option value="">-- Select Tenant --</option>'+
     sorted.map(t=>{
